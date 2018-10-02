@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: example-auth
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind: AuthService
+      name: authentication
+      auth_service: "auth-app:8000"
+      allowed_headers:
+      - "x-auth-token"
+spec:
+  type: ClusterIP
+  selector:
+    app: example-auth
+  ports:
+  - port: 3000
+    name: http-example-auth
+    targetPort: http-api

@@ -1,0 +1,44 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: getting-started
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: getting-started
+    spec:
+      containers:
+      - name: getting-started
+        image: shirokumasoftware/getting-started:latest
+        ports:
+          - containerPort: 8000
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: getting-started
+spec:
+  type: NodePort
+  ports:
+  - port: 8000
+    nodePort: 30010
+    protocol: TCP
+  selector:
+    app: getting-started
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress
+spec:
+  rules:
+  - host: local-domain.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: getting-started
+          servicePort: 8000

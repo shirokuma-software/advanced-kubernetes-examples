@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: httproute
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name:  http_mapping
+      prefix: /
+      service: getting-started:8000
+spec:
+  ports:
+  - name: httproute
+    port: 80

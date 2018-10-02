@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kaniko
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:latest
+    args: ["--dockerfile=Dockerfile",
+            "--context=/src",
+            "--destination=192.168.99.1:5000/kaniko-app:latest",
+            "--insecure=true"]
+    volumeMounts:
+    - name: kaniko-context
+      mountPath: /src
+    imagePullPolicy: Always
+  restartPolicy: Never
+  volumes:
+    - name: kaniko-context
+      hostPath:
+        path: /Users/.share/app
